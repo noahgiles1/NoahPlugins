@@ -74,7 +74,7 @@ public class ExamplePlugin extends Plugin
 				log.info("Random point in object: " + point);
 
 				log.info("Sending click at random point");
-				//extUtils.click(client.getMouseCanvasPosition());
+				extUtils.click(client.getMouseCanvasPosition());
 			});
 		}
 	}
