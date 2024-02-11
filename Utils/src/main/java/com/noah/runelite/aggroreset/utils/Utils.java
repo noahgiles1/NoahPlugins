@@ -1,4 +1,4 @@
-package com.noah.runelite.utils;
+package com.noah.runelite.aggroreset.utils;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.MenuAction;
+import net.runelite.api.MenuEntry;
 import net.runelite.api.Point;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -109,6 +111,18 @@ public class Utils extends Plugin
         mouseEvent(500, p);
     }
 
+    public Point changePointIfStretch(Point p) {
+        if (client.isStretchedEnabled())
+        {
+            final Dimension stretched = client.getStretchedDimensions();
+            final Dimension real = client.getRealDimensions();
+            final double width = (stretched.width / real.getWidth());
+            final double height = (stretched.height / real.getHeight());
+            return new Point((int) (p.getX() * width), (int) (p.getY() * height));
+        }
+        return p;
+    }
+
     public Point getClickPoint(Rectangle rect)
     {
         final int x = (int) (rect.getX() + getRandomIntBetweenRange((int) rect.getWidth() / 6 * -1, (int) rect.getWidth() / 6) + rect.getWidth() / 2);
@@ -132,5 +146,10 @@ public class Utils extends Plugin
         );
 
         client.getCanvas().dispatchEvent(e);
+    }
+
+    public MenuEntry createMenuEntry(int identifier, MenuAction type, int param0, int param1, boolean forceLeftClick) {
+        return client.createMenuEntry(0).setOption("").setTarget("").setIdentifier(identifier).setType(type)
+                .setParam0(param0).setParam1(param1).setForceLeftClick(forceLeftClick);
     }
 }
